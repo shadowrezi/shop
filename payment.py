@@ -10,8 +10,8 @@ from models import db, User, Product, Purchase
 payment_bp = Blueprint('payment', __name__)
 
 # === CONFIG ===
-MERCHANT_ACCOUNT = 'test_merch_n1'
-MERCHANT_SECRET_KEY = 'flk3409refn54t54t*FNJRET'
+MERCHANT_ACCOUNT = '4d14a797c3aa67cad4be8adb4de473fd341c88e0'
+MERCHANT_SECRET_KEY = '6ffc18fde19eb25c7720f3fec57309aa'
 
 MERCHANT_DOMAIN = 'shop-auf1.onrender.com'
 RETURN_URL = 'https://shop-auf1.onrender.com/payment/success'

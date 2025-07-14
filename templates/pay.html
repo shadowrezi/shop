@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <title>Перенаправлення на оплату...</title>
+</head>
+<body>
+  <p>Будь ласка, зачекайте, ви перенаправляєтесь на сторінку оплати...</p>
+
+  <form method="POST" action="https://secure.wayforpay.com/pay" id="paymentForm">
+    {% for key, value in payment.items() %}
+      {% if value is iterable and not value|string %}
+        {% for v in value %}
+          <input type="hidden" name="{{ key }}" value="{{ v }}" />
+        {% endfor %}
+      {% else %}
+        <input type="hidden" name="{{ key }}" value="{{ value }}" />
+      {% endif %}
+    {% endfor %}
+  </form>
+
+  <script>
+    document.getElementById('paymentForm').submit();
+  </script>
+</body>
+</html>
