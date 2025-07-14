@@ -2,9 +2,8 @@ from flask import (
     Flask, render_template, redirect,
     url_for, request, session, flash
 )
-from werkzeug.security import (
-    generate_password_hash, check_password_hash
-)
+from werkzeug.security import generate_password_hash, check_password_hash
+from payment import payment_bp
 from database import db
 from models import User, Product, Purchase
 
@@ -14,6 +13,7 @@ app.secret_key = '123'
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shop.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.register_blueprint(payment_bp)
 
 db.init_app(app)
 
@@ -122,9 +122,6 @@ def buy(product_id):
     if user.balance < product.price:
         flash("Недостатньо коштів")
         return redirect(url_for('index'))
-
-    # Списати гроші, зберегти покупку
-    user.balance -= product.price
 
     purchase = Purchase(
         user_id=user.id,
