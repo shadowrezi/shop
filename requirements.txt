@@ -1,0 +1,3 @@
+flask
+vercel-wsgi
+flask_sqlalchemy
