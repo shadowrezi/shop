@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Профіль користувача</h2>
+
+<p><strong>Логін:</strong> {{ user.username }}</p>
+<p><strong>Баланс:</strong> {{ user.balance }} грн</p>
+
+<h3>Куплені товари:</h3>
+{% if products %}
+    <ul>
+        {% for product in products %}
+            <li>{{ product.name }} — {{ product.price }} грн</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Ви ще нічого не купили.</p>
+{% endif %}
+
+<a href="{{ url_for('index') }}">
+    <button>На головну</button>
+</a>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Товари</h2>
+
+{% if user %}
+  <p><strong>Баланс:</strong> {{ user.balance }} грн</p>
+{% endif %}
+
+<div class="products">
+  {% for product in products %}
+    <div class="product">
+      <h3>{{ product.name }}</h3>
+      <p>{{ product.description }}</p>
+      <p>Ціна: {{ product.price }} грн</p>
+      {% if user %}
+        <a href="{{ url_for('buy', product_id=product.id) }}">
+          <button>Купити</button>
+        </a>
+      {% else %}
+        <p><a href="{{ url_for('login') }}">Увійдіть, щоб купувати</a></p>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
