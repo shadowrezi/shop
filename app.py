@@ -9,6 +9,14 @@ db.init_app(app)
 
 with app.app_context():
     db.create_all()
+    
+    product = Product(
+        name='Перший товар',
+        price=100.0,
+        payment_url='https://secure.wayforpay.com/button/bf63b7694ad58'
+    )
+    db.session.add(product)
+    db.session.commit()
 
 
 @app.route('/')
