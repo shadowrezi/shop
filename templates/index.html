@@ -14,7 +14,7 @@
       <p>Ціна: {{ product.price }} грн</p>
       {% if user %}
         <a href="{{ url_for('buy', product_id=product.id) }}">
-          <a href="https://ko">Купити</a>
+          <a href="/pay/1">Купити</a>
         </a>
       {% else %}
         <p><a href="{{ url_for('login') }}">Увійдіть, щоб купувати</a></p>
