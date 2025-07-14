@@ -6,7 +6,9 @@ app.secret_key = 'your_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shop.db'
 
 db.init_app(app)
-db.create_all()
+
+with app.app_context():
+    db.create_all()
 
 
 @app.route('/')
