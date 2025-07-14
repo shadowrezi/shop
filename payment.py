@@ -70,10 +70,11 @@ def pay(product_id):
 
     payment_data['merchantSignature'] = generate_signature(payment_data)
 
+    print(payment_data)
+
     return render_template('pay.html', payment=payment_data)
 
 
-# === CALLBACK: підтвердження платежу ===
 @payment_bp.route('/payment/callback', methods=['POST'])
 def payment_callback():
     data = request.get_json()
