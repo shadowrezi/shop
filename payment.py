@@ -66,6 +66,7 @@ def pay(product_id):
         'productPrice': [product.price],
         'returnUrl': RETURN_URL,
     }
+    print(payment_data)
 
     payment_data['merchantSignature'] = generate_signature(payment_data)
 
@@ -90,6 +91,8 @@ def payment_callback():
         'productPrice': data['productPrice'],
     })
 
+    
+    
     if received_signature != expected_signature:
         return 'Invalid signature', 403
 
