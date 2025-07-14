@@ -1,164 +1,74 @@
-from flask import (
-    Flask, render_template, redirect,
-    url_for, request, session, flash
-)
-from werkzeug.security import generate_password_hash, check_password_hash
-from payment import payment_bp
-from database import db
-from models import User, Product, Purchase
-
+from flask import Flask, render_template, redirect, url_for, session, request, flash
+from models import db, User, Product
 
 app = Flask(__name__)
-app.secret_key = '123'
-
+app.secret_key = 'your_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shop.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.register_blueprint(payment_bp)
 
 db.init_app(app)
-
-
-@app.before_request
-def create_tables():
-    db.create_all()
-
-    if not Product.query.first():
-        sample_products = [
-            Product(
-                id=0,
-                name="Книга",
-                price=150,
-                description="Цікава книга."
-            ),
-            Product(
-                id=1,
-                name="Навушники",
-                price=300,
-                description="З якісним звуком."
-            )
-        ]
-        db.session.add_all(sample_products)
-        db.session.commit()
+db.create_all()
 
 
 @app.route('/')
 def index():
     products = Product.query.all()
     user = None
-
-    if session.get('user_id'):
-        user = User.query.get(session['user_id'])  # <-- завжди свіже
-
-    return render_template(
-        'index.html',
-        products=products,
-        user=user
-    )
+    if 'user_id' in session:
+        user = User.query.get(session['user_id'])
+    return render_template('index.html', products=products, user=user)
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
-        password = generate_password_hash(request.form['password'])
-
         if User.query.filter_by(username=username).first():
             flash('Користувач вже існує.')
             return redirect(url_for('register'))
-
-        new_user = User(
-            username=username,
-            password=password
-        )
-
-        db.session.add(new_user)
+        user = User(username=username)
+        db.session.add(user)
         db.session.commit()
-
-        flash('Реєстрація успішна. Увійдіть.')
-        return redirect(url_for('login'))
-
+        session['user_id'] = user.id
+        return redirect(url_for('index'))
     return render_template('register.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        user = User.query.filter_by(
-            username=request.form['username']
-        ).first()
-
-        if user and check_password_hash(
-            user.password, request.form['password']
-        ):
+        username = request.form['username']
+        user = User.query.filter_by(username=username).first()
+        if user:
             session['user_id'] = user.id
-            flash('Успішний вхід.')
             return redirect(url_for('index'))
-
-        flash('Невірний логін або пароль.')
-
+        flash('Користувача не знайдено.')
     return render_template('login.html')
 
 
 @app.route('/logout')
 def logout():
-    session.pop('user_id', None)
-    flash('Ви вийшли.')
-    return redirect(url_for('index'))
-
-
-@app.route('/buy/<int:product_id>')
-def buy(product_id):
-    user_id = session.get('user_id')
-
-    if not user_id:
-        flash("Авторизуйтесь для покупки")
-        return redirect(url_for('login'))
-
-    user = User.query.get(user_id)
-    product = Product.query.get(product_id)
-
-    if product is None:
-        flash("Товар не знайдено")
-        return redirect(url_for('index'))
-
-    if user.balance < product.price:
-        flash("Недостатньо коштів")
-        return redirect(url_for('index'))
-
-    purchase = Purchase(
-        user_id=user.id,
-        product_id=product.id
-    )
-
-    db.session.add(purchase)
-    db.session.commit()
-
-    flash(f"Товар '{product.name}' куплено!")
+    session.clear()
     return redirect(url_for('index'))
 
 
 @app.route('/profile')
 def profile():
-    user_id = session.get('user_id')
-
-    if not user_id:
-        flash("Спочатку увійдіть")
+    if 'user_id' not in session:
         return redirect(url_for('login'))
+    user = User.query.get(session['user_id'])
+    return render_template('profile.html', user=user)
 
-    user = User.query.get(user_id)
 
-    purchases = Purchase.query.filter_by(
-        user_id=user.id
-    ).all()
+@app.route('/confirm_payment')
+def confirm_payment():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+    user = User.query.get(session['user_id'])
 
-    bought_products = [p.product for p in purchases]
-
-    return render_template(
-        'profile.html',
-        user=user,
-        products=bought_products
-    )
+    # (опціонально) додай логіку додавання товару вручну тут
+    flash('Платіж підтверджено. Дякуємо за покупку!')
+    return redirect(url_for('profile'))
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(debug=True)

@@ -1,25 +1,45 @@
-{% extends 'base.html' %}
-{% block content %}
-<h2>Товари</h2>
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Магазин</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Інтернет-магазин</h1>
+        <nav>
+            {% if user %}
+                <span>Вітаємо, {{ user.username }}!</span> |
+                <a href="{{ url_for('profile') }}">Профіль</a> |
+                <a href="{{ url_for('logout') }}">Вийти</a>
+                <br><small>Баланс: {{ user.balance }} ₴</small>
+            {% else %}
+                <a href="{{ url_for('login') }}">Увійти</a> |
+                <a href="{{ url_for('register') }}">Зареєструватися</a>
+            {% endif %}
+        </nav>
+    </header>
 
-{% if user %}
-  <p><strong>Баланс:</strong> {{ user.balance }} грн</p>
-{% endif %}
-
-<div class="products">
-  {% for product in products %}
-    <div class="product">
-      <h3>{{ product.name }}</h3>
-      <p>{{ product.description }}</p>
-      <p>Ціна: {{ product.price }} грн</p>
-      {% if user %}
-        <a href="{{ url_for('buy', product_id=product.id) }}">
-          <a href="/pay/1">Купити</a>
-        </a>
-      {% else %}
-        <p><a href="{{ url_for('login') }}">Увійдіть, щоб купувати</a></p>
-      {% endif %}
-    </div>
-  {% endfor %}
-</div>
-{% endblock %}
+    <main>
+        <h2>Товари</h2>
+        {% if products %}
+            <ul class="product-list">
+                {% for product in products %}
+                    <li class="product-item">
+                        <strong>{{ product.name }}</strong><br>
+                        Ціна: {{ product.price }} ₴<br>
+                        {% if product.payment_url %}
+                            <a href="{{ product.payment_url }}" class="buy-button">Купити</a>
+                        {% else %}
+                            <em>Недоступно</em>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Товарів немає.</p>
+        {% endif %}
+    </main>
+</body>
+</html>
