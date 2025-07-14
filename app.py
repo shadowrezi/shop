@@ -25,11 +25,13 @@ def create_tables():
     if not Product.query.first():
         sample_products = [
             Product(
+                id=0,
                 name="Книга",
                 price=150,
                 description="Цікава книга."
             ),
             Product(
+                id=1,
                 name="Навушники",
                 price=300,
                 description="З якісним звуком."
