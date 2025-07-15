@@ -30,7 +30,7 @@
                         <strong>{{ product.name }}</strong><br>
                         Ціна: {{ product.price }} ₴<br>
                         {% if product.payment_url %}
-                            <a href="{{ product.payment_url }}" class="buy-button">Купити</a>
+                            <a href="/buy/{{ product.id }}" class="buy-button">Купити</a>
                         {% else %}
                             <em>Недоступно</em>
                         {% endif %}

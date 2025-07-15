@@ -1,0 +1,16 @@
+<form method="POST" action="https://secure.wayforpay.com/pay">
+    <input type="hidden" name="merchantAccount" value="{{ merchantAccount }}">
+    <input type="hidden" name="merchantDomainName" value="{{ merchantDomainName }}">
+    <input type="hidden" name="orderReference" value="{{ orderReference }}">
+    <input type="hidden" name="orderDate" value="{{ orderDate }}">
+    <input type="hidden" name="amount" value="{{ amount }}">
+    <input type="hidden" name="currency" value="UAH">
+    <input type="hidden" name="productName[]" value="{{ productName }}">
+    <input type="hidden" name="productPrice[]" value="{{ amount }}">
+    <input type="hidden" name="productCount[]" value="1">
+    <input type="hidden" name="language" value="UA">
+    <input type="hidden" name="returnUrl" value="https://shop-auf1.onrender.com/payment_success/{{ productId }}">
+    <input type="hidden" name="serviceUrl" value="https://shop-auf1.onrender.com/payment_callback">
+    <input type="hidden" name="merchantSignature" value="{{ signature }}">
+    <button type="submit">Оплатить "{{ productName }}" — {{ amount }} грн</button>
+</form>
