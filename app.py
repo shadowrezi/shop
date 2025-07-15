@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, session, request, flash
+from flask import Flask, render_template, redirect, url_for, request, flash, abort
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 from models import db, User, Product, Purchase
 
@@ -22,7 +22,7 @@ with app.app_context():
     db.create_all()
     if not Product.query.first():
         product = Product(
-            name='123',
+            name='',
             price=100.0,
             payment_url='https://secure.wayforpay.com/button/b92b81655ead9'
         )
@@ -83,14 +83,24 @@ def buy_product(product_id):
     return redirect(product.payment_url)
 
 
-@app.route('/payment_success/<int:product_id>', methods=['POST', 'GET'])
+@app.route('/payment_success/<int:product_id>', methods=['POST'])
 @login_required
 def payment_success(product_id: int):
+    
+    status = request.form.get('transactionStatus')
+    reason_code = request.form.get('reasonCode')
+    
+    if status != 'Approved' or reason_code != '1100':
+        abort(403)
+
     product = Product.query.get_or_404(product_id)
+    
     purchase = Purchase(user_id=current_user.id, product_id=product.id)
     db.session.add(purchase)
     db.session.commit()
+    
     flash(f'Покупка товара "{product.name}" успешна!')
+    
     return redirect(url_for('profile'))
 
 

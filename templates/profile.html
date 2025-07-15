@@ -8,8 +8,8 @@
 <h3>Куплені товари:</h3>
 {% if user.purchases %}
     <ul>
-        {% for product in user.purchases %}
-            <li>{{ product.name }} — {{ product.price }} грн</li>
+        {% for purchase in user.purchases %}
+            <li>{{ purchase.product.name }} — {{ purchase.product.price }} грн</li>
         {% endfor %}
     </ul>
 {% else %}
