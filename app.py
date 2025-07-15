@@ -101,7 +101,7 @@ def buy(product_id: int):
         order_date,
         f'{product.price:.2f}',
         "UAH",
-        product.name,
+        [],
         "1",
         f'{product.price:.2f}'
     ]
@@ -114,7 +114,7 @@ def buy(product_id: int):
         "orderReference": order_id,
         "orderDate": order_date,
         "amount": f'{product.price:.2f}',
-        "productName": product.name,
+        "productName": [],
         "signature": signature,
         "productId": product_id
     })
@@ -131,6 +131,7 @@ def payment_callback():
 @app.route('/payment_success/<int:product_id>')
 def payment_success(product_id: int):
     print(product_id)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
