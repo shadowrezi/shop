@@ -23,7 +23,7 @@ with app.app_context():
     if not Product.query.first():
         product = Product(
             name='',
-            price=100.0,
+            price=1,
             payment_url='https://secure.wayforpay.com/button/b92b81655ead9'
         )
         db.session.add(product)
