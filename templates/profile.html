@@ -6,9 +6,9 @@
 <p><strong>Баланс:</strong> {{ user.balance }} грн</p>
 
 <h3>Куплені товари:</h3>
-{% if products %}
+{% if user.purchases %}
     <ul>
-        {% for product in products %}
+        {% for product in user.purchases %}
             <li>{{ product.name }} — {{ product.price }} грн</li>
         {% endfor %}
     </ul>
