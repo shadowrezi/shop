@@ -84,7 +84,7 @@ def buy_product(product_id):
 
 
 @app.route('/payment_success/<int:product_id>')
-@login_required
+#@login_required
 def payment_success(product_id: int):
     product = Product.query.get_or_404(product_id)
     purchase = Purchase(user_id=current_user.id, product_id=product.id)
