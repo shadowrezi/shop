@@ -1,46 +1,39 @@
-import time
-import hashlib
-import base64
-
 from flask import Flask, render_template, redirect, url_for, session, request, flash
-from models import db, User, Product
+from flask_login import LoginManager, login_required, login_user, logout_user, current_user
+from models import db, User, Product, Purchase
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shop.db'
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
 db.init_app(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
 
 with app.app_context():
     db.create_all()
-    
-    product = Product(
-        name='Перший товар',
-        price=100.0,
-        payment_url='https://secure.wayforpay.com/button/bf63b7694ad58'
-    )
-    db.session.add(product)
-    db.session.commit()
-
-MERCHANT_LOGIN = 'shop_auf1_onrender_com1'
-MERCHANT_SECRET_KEY = '55221fdaae9c08a5c618d5bbd84556b2317aac7b'
-MERCHANT_PASSWORD = '4562bd8b7dc5cbedfe5ad6265c0dc5f2'
-DOMAIN = "https://shop-auf1.onrender.com"
-
-
-def generate_signature(params: list, secret_key: str) -> str:
-    raw = ';'.join([str(p) for p in params])
-    hashed = hashlib.sha1(raw.encode()).digest()
-    return base64.b64encode(hashed).decode()
+    if not Product.query.first():
+        product = Product(
+            name='123',
+            price=100.0,
+            payment_url='https://secure.wayforpay.com/button/b92b81655ead9'
+        )
+        db.session.add(product)
+        db.session.commit()
 
 
 @app.route('/')
 def index():
     products = Product.query.all()
-    user = None
-    if 'user_id' in session:
-        user = User.query.get(session['user_id'])
-    return render_template('index.html', products=products, user=user)
+    return render_template('index.html', products=products)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -53,7 +46,7 @@ def register():
         user = User(username=username)
         db.session.add(user)
         db.session.commit()
-        session['user_id'] = user.id
+        login_user(user)
         return redirect(url_for('index'))
     return render_template('register.html')
 
@@ -64,73 +57,41 @@ def login():
         username = request.form['username']
         user = User.query.filter_by(username=username).first()
         if user:
-            session['user_id'] = user.id
+            login_user(user)
             return redirect(url_for('index'))
         flash('Користувача не знайдено.')
     return render_template('login.html')
 
 
 @app.route('/logout')
+@login_required
 def logout():
-    session.clear()
+    logout_user()
     return redirect(url_for('index'))
 
 
 @app.route('/profile')
+@login_required
 def profile():
-    if 'user_id' not in session:
-        return redirect(url_for('login'))
-    user = User.query.get(session['user_id'])
-    return render_template('profile.html', user=user)
+    return render_template('profile.html', user=current_user)
 
 
 @app.route('/buy/<int:product_id>')
-def buy(product_id: int):
-    product = Product.query.get(product_id)
-    if not product:
-        flash('Product not found! ')
-        return render_template("index.html")
-    
-    order_id = f"ORDER_{int(time.time())}"
-    order_date = int(time.time())
-    
-    params = [
-        "shop_auf1_onrender_com1",
-        DOMAIN,
-        order_id,
-        order_date,
-        f'{product.price:.2f}',
-        "UAH",
-        [],
-        "1",
-        f'{product.price:.2f}'
-    ]
-    
-    signature = generate_signature(params, secret_key=MERCHANT_SECRET_KEY)
-
-    return render_template("buy.html", **{
-        "merchantAccount": MERCHANT_LOGIN,
-        "merchantDomainName": DOMAIN,
-        "orderReference": order_id,
-        "orderDate": order_date,
-        "amount": f'{product.price:.2f}',
-        "productName": [],
-        "signature": signature,
-        "productId": product_id
-    })
-
-
-@app.route('/payment_callback', methods=['POST'])
-def payment_callback():
-    data = request.json
-    
-    print(data)
-    return "OK"
+@login_required
+def buy_product(product_id):
+    product = Product.query.get_or_404(product_id)
+    return redirect(product.payment_url)
 
 
 @app.route('/payment_success/<int:product_id>')
+@login_required
 def payment_success(product_id: int):
-    print(product_id)
+    product = Product.query.get_or_404(product_id)
+    purchase = Purchase(user_id=current_user.id, product_id=product.id)
+    db.session.add(purchase)
+    db.session.commit()
+    flash(f'Покупка товара "{product.name}" успешна!')
+    return redirect(url_for('profile'))
 
 
 if __name__ == '__main__':

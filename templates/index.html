@@ -9,11 +9,11 @@
     <header>
         <h1>Інтернет-магазин</h1>
         <nav>
-            {% if user %}
-                <span>Вітаємо, {{ user.username }}!</span> |
+            {% if current_user.is_authenticated %}
+                <span>Вітаємо, {{ current_user.username }}!</span> |
                 <a href="{{ url_for('profile') }}">Профіль</a> |
                 <a href="{{ url_for('logout') }}">Вийти</a>
-                <br><small>Баланс: {{ user.balance }} ₴</small>
+                <br><small>Баланс: {{ current_user.balance }} ₴</small>
             {% else %}
                 <a href="{{ url_for('login') }}">Увійти</a> |
                 <a href="{{ url_for('register') }}">Зареєструватися</a>
@@ -29,10 +29,10 @@
                     <li class="product-item">
                         <strong>{{ product.name }}</strong><br>
                         Ціна: {{ product.price }} ₴<br>
-                        {% if product.payment_url %}
-                            <a href="/buy/{{ product.id }}" class="buy-button">Купити</a>
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('buy_product', product_id=product.id) }}" class="buy-button">Купити</a>
                         {% else %}
-                            <em>Недоступно</em>
+                            <em>Увійдіть, щоб придбати</em>
                         {% endif %}
                     </li>
                 {% endfor %}
