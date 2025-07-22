@@ -1,16 +1,26 @@
 from flask import Flask, render_template, redirect, url_for, request, flash, abort
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
+
+from werkzeug.security import generate_password_hash
+from itsdangerous import URLSafeTimedSerializer
+
+from send_email import send_email
+from config import Config
 from models import db, User, Product, Purchase
+from forms import RegistrationForm
+
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shop.db'
+app.secret_key = Config.SECRET_KEY
+app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 db.init_app(app)
+
+s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 
 @login_manager.user_loader
@@ -38,17 +48,50 @@ def index():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if request.method == 'POST':
-        username = request.form['username']
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        email = form.email.data.strip()
+        username = form.username.data.strip()
+        hashed_password = generate_password_hash(form.password.data)
+        
         if User.query.filter_by(username=username).first():
-            flash('Користувач вже існує.')
+            flash('Username is not avaible.')
             return redirect(url_for('register'))
-        user = User(username=username)
+        if User.query.filter_by(email=email).first():
+            flash('Email is not avaible')
+            return redirect(url_for('register'))
+    
+        user = User(username=username, email=email, password=hashed_password, confirmed=False)
         db.session.add(user)
         db.session.commit()
-        login_user(user)
-        return redirect(url_for('index'))
-    return render_template('register.html')
+        
+        token = s.dumps(user.email, salt='email-confirm')
+        confirm_url = url_for('confirm_email', token=token, _external=True)
+        html = render_template('email_confirmation.html', confirm_url=confirm_url)
+        send_email(user.email, 'Confirm email', html)
+        
+        flash('Check your email for confirm account')
+        return redirect(url_for('login'))
+    return render_template('register.html', form=form)
+
+
+@app.route('/confirm/<token>')
+def confirm_email(token):
+    try:
+        email = s.loads(token, salt='email-confirm', max_age=3600)
+    except Exception:
+        flash('Посилання недійсне або прострочене.', 'danger')
+        return redirect(url_for('register'))
+
+    user = User.query.filter_by(email=email).first_or_404()
+    if user.confirmed:
+        flash('Email вже підтверджений.', 'info')
+    else:
+        user.confirmed = True
+        db.session.commit()
+        flash('Email успішно підтверджено.', 'success')
+
+    return redirect(url_for('index'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
