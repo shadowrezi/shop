@@ -1,0 +1,10 @@
+<h2>Account verification</h2>
+<p>We sent to you code. Enter it: </p>
+
+<form method="POST">
+
+    {{ form.hidden_tag() }}
+
+    {{ form.code.label }} {{ form.code(size=4) }}
+    {{ form.submit() }}
+</form>

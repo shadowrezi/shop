@@ -1,4 +1,6 @@
-from flask import Flask, render_template, redirect, url_for, request, flash, abort
+from random import randint
+
+from flask import Flask, render_template, redirect, url_for, request, flash, session
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 
 from werkzeug.security import generate_password_hash
@@ -7,7 +9,7 @@ from itsdangerous import URLSafeTimedSerializer
 from send_email import send_email
 from config import Config
 from models import db, User, Product, Purchase
-from forms import RegistrationForm
+from forms import RegistrationForm, CodeVerificationForm
 
 
 app = Flask(__name__)
@@ -50,50 +52,59 @@ def index():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        email = form.email.data.strip()
         username = form.username.data.strip()
-        hashed_password = generate_password_hash(form.password.data)
+        email = form.email.data.strip()
+        password = form.password.data.strip()
         
         if User.query.filter_by(username=username).first():
-            flash('Username is not avaible.')
-            return redirect(url_for('register'))
+            flash('Account with this username has been already registered!')
         if User.query.filter_by(email=email).first():
-            flash('Email is not avaible')
-            return redirect(url_for('register'))
-    
-        user = User(username=username, email=email, password=hashed_password, confirmed=False)
-        db.session.add(user)
-        db.session.commit()
+            flash('Account with this email has been already registered!')
+
+        code = str(randint(1000, 9999))
+        session['registration'] = {
+            'username': username,
+            'email': email,
+            'password': generate_password_hash(password),
+            'code': code
+        }
         
-        token = s.dumps(user.email, salt='email-confirm')
-        confirm_url = url_for('confirm_email', token=token, _external=True)
-        html = render_template('email_confirmation.html', confirm_url=confirm_url)
-        send_email(user.email, 'Confirm email', html)
-        print(html)
+        html = f'''
+            <h2>Your Verification Code: </h2>
+            <h1><b>{code}</b></h1>
+        '''
         
-        flash('Check your email for confirm account')
-        return redirect(url_for('login'))
+        send_email(email, 'Verification code', html)
+        flash('We sent verification code on your email. ')
+        return redirect(url_for('verify'))
     return render_template('register.html', form=form)
 
 
-@app.route('/confirm/<token>')
-def confirm_email(token):
-    try:
-        email = s.loads(token, salt='email-confirm', max_age=3600)
-    except Exception:
-        flash('Посилання недійсне або прострочене.', 'danger')
+@app.route('/verify', methods=['GET', 'POST'])
+def verify():
+    form = CodeVerificationForm()
+    register_data = session.get('registration')
+    
+    if not register_data:
+        flash('Session is deprecated! Try again')
         return redirect(url_for('register'))
-
-    user = User.query.filter_by(email=email).first_or_404()
-    if user.confirmed:
-        flash('Email вже підтверджений.', 'info')
-    else:
-        user.confirmed = True
+    
+    if form.validate_on_submit() and form.code.data.strip() == register_data['code']:
+        user = User(
+            username=register_data['username'],
+            email=register_data['email'],
+            password=register_data['password']
+        )
+        db.session.add(user)
         db.session.commit()
-        flash('Email успішно підтверджено.', 'success')
-
-    return redirect(url_for('index'))
-
+        
+        session.pop('registration')
+        flash('Registration is successfuly! ')
+        return redirect(url_for('login'))
+    
+    flash("Invalid code! ")
+    return render_template('verify.html', form=form)
+        
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -127,29 +138,8 @@ def buy_product(product_id):
     return redirect(f'https://urijozimko.gumroad.com/l/{product.payment_id}')
 
 
-@app.route('/payment_success/<int:product_id>', methods=['POST'])
-@login_required
-def payment_success(product_id: int):
-    
-    status = request.form.get('transactionStatus')
-    reason_code = request.form.get('reasonCode')
-    
-    if status != 'Approved' or reason_code != '1100':
-        abort(403)
-
-    product = Product.query.get_or_404(product_id)
-    
-    purchase = Purchase(user_id=current_user.id, product_id=product.id)
-    db.session.add(purchase)
-    db.session.commit()
-    
-    flash(f'Покупка товара "{product.name}" успешна!')
-    
-    return redirect(url_for('profile'))
-
-
 @app.route('/gumroad_webhook', methods=['POST'])
-def catch_all():
+def payment_success():
     data = request.form.to_dict()
     payment_id = data['permalink']
     email = data['email']

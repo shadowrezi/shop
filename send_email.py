@@ -13,7 +13,7 @@ EMAIL_PASSWORD = os.environ['EMAIL_PASSWORD']
 
 
 def send_email(to_email: str, subject: str, body: str) -> None:
-    message = MIMEText(body, 'plain', 'utf-8')
+    message = MIMEText(body, 'html', 'utf-8')
     
     message['Subject'] = subject
     message['From'] = EMAIL_ADDRESS
