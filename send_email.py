@@ -1,30 +1,24 @@
-import requests
 import os
+import smtplib
+from email.mime.text import MIMEText
 
 from dotenv import load_dotenv
 
 load_dotenv('.env')
 
+SMTP_SERVER = 'smtp.ukr.net'
+SMTP_PORT = 465
+EMAIL_ADDRESS = 'shadowshop@ukr.net'
+EMAIL_PASSWORD = os.environ['EMAIL_PASSWORD']
 
-RESEND_API_KEY = os.environ['RESEND_API_KEY']
-FROM_EMAIL = 'onboarding@resend.dev'
 
-
-def send_email(to_email, subject, html):
-    url = 'https://api.resend.com/emails'
-    headers = {
-        'Authorization': f'Bearer {RESEND_API_KEY}',
-        'Content-Type': 'application/json'
-    }
-    data = {
-        "from": "Your App <onboarding@resend.dev>",
-        'to': [to_email],
-        'subject': subject,
-        'html': html
-    }
-    response = requests.post(url, headers=headers, json=data)
+def send_email(to_email: str, subject: str, body: str) -> None:
+    message = MIMEText(body, 'plain', 'utf-8')
     
-    if response.status_code in [200, 202]:
-        print('Email sent!')
-    else:
-        print(f"error\n{response.text}")
+    message['Subject'] = subject
+    message['From'] = EMAIL_ADDRESS
+    message['To'] = to_email
+    
+    with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT) as server:
+        server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
+        server.sendmail(EMAIL_ADDRESS, to_email, message.as_string())
