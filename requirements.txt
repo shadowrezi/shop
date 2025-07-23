@@ -3,3 +3,7 @@ flask_sqlalchemy
 flask-login
 werkzeug
 gunicorn
+python-dotenv
+requests
+itsdangerous
+flask-wtf
