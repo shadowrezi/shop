@@ -1,103 +1,18 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f5f5;
-    color: #333;
+.centered-form-container {
+  display: flex;
+  justify-content: center; /* центр по горизонтали */
+  align-items: center;     /* центр по вертикали */
+  min-height: 80vh;
+  padding: 20px;
 }
 
-a {
-    color: #2e7d32;
-    text-decoration: none;
+.centered-form-container form {
+  width: 100%;       /* адаптивная ширина */
+  max-width: 400px;  /* максимум 400px */
+  box-sizing: border-box;
+  background: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-a:hover {
-    text-decoration: underline;
-}
-
-header {
-    background-color: #4CAF50;
-    color: white;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-header h1 {
-    margin: 0;
-    font-size: 2rem;
-}
-
-.nav-right {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-direction: row;
-}
-
-.nav-right a {
-    color: white;
-    text-decoration: underline;
-    margin-left: 0.5rem;
-}
-
-.nav-right span {
-    color: white;
-}
-
-header small {
-    font-size: 0.8rem;
-    color: #e0f2e0;
-}
-
-main {
-    padding: 2rem;
-    max-width: 900px;
-    margin: 0 auto;
-}
-
-h2 {
-    color: #4CAF50;
-    margin-top: 0;
-}
-
-.product-list {
-    list-style: none;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1.5rem;
-}
-
-.product-item {
-    background-color: white;
-    border: 1px solid #ddd;
-    padding: 1rem;
-    border-radius: 8px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease;
-}
-
-.product-item:hover {
-    transform: translateY(-4px);
-}
-
-.buy-button {
-    display: inline-block;
-    margin-top: 0.5rem;
-    background-color: #4CAF50;
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.buy-button:hover {
-    background-color: #388E3C;
-}

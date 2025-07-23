@@ -1,10 +1,21 @@
-<h2>Account verification</h2>
-<p>We sent to you code. Enter it: </p>
+{% extends "base.html" %}
+{% block title %}Verification{% endblock %}
 
-<form method="POST">
-
-    {{ form.hidden_tag() }}
-
-    {{ form.code.label }} {{ form.code(size=4) }}
-    {{ form.submit() }}
-</form>
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="min-height: 75vh;">
+  <div class="card shadow-sm p-4" style="width: 100%; max-width: 400px;">
+    <h2 class="mb-3 text-center">Email Verification</h2>
+    <p class="text-center">We sent a verification code to your email. Enter it below:</p>
+    <form method="POST">
+      {{ form.hidden_tag() }}
+      <div class="mb-3">
+        {{ form.code.label(class="form-label") }}
+        {{ form.code(class="form-control") }}
+      </div>
+      <div class="d-grid">
+        {{ form.submit(class="btn btn-primary") }}
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

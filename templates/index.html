@@ -1,49 +1,50 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-    <meta charset="UTF-8">
-    <title>Магазин</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <header>
-        <h1>Інтернет-магазин</h1>
-        <nav class="nav-right">
-            {% if current_user.is_authenticated %}
-                <span>Вітаємо, {{ current_user.username }}!</span> |
-                <a href="{{ url_for('profile') }}">Профіль</a> |
-                <a href="{{ url_for('logout') }}">Вийти</a>
-                <br><small>Баланс: {{ current_user.balance }} ₴</small>
-            {% else %}
-                <a href="{{ url_for('login') }}">Увійти</a> |
-                <a href="{{ url_for('register') }}">Зареєструватися</a>
-            {% endif %}
-        </nav>
-    </header>
+{% extends "base.html" %}
+{% block title %}ShadowShop - Home{% endblock %}
 
-    <main>
-        <h2>Товари</h2>
-        {% if products %}
-            <ul class="product-list">
-                {% for product in products %}
-                    <li class="product-item">
-                        <h2>{{ product.name }}</h2>
-                        <br>Ціна: {{ product.price }} ₴<br>
-                        {% if current_user.is_authenticated %}
-                            {% if current_user.confirmed %}
-                                <a href="{{ url_for('buy_product', product_id=product.id) }}" class="buy-button">Купити</a>
+{% block content %}
+
+        <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder">Shop in style</h1>
+                    <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
+                </div>
+            </div>
+        </header>
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for product in products %}
+            <div class="col mb-5">
+                <div class="card h-100">
+                    <!-- Product image -->
+                    <img class="card-img-top" src="{{ product.image_url or 'https://dummyimage.com/450x300/dee2e6/6c757d.jpg' }}" alt="{{ product.name }}" />
+                    
+                    <!-- Product details -->
+                    <div class="card-body p-4">
+                        <div class="text-center">
+                            <!-- Product name -->
+                            <h5 class="fw-bolder">{{ product.name }}</h5>
+                            <!-- Product price -->
+                            {{ product.price }} ₴
+                        </div>
+                    </div>
+                    
+                    <!-- Product actions -->
+                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                        <div class="text-center">
+                            {% if current_user.is_authenticated %}
+                                <a class="btn btn-outline-dark mt-auto" href="{{ url_for('buy_product', product_id=product.id) }}">Купити</a>
                             {% else %}
-                                <em>Confirm your account for buy</em>
-                            {% endif %}    
-                        {% else %}
-                            <em>Log in for buy</em>
-                        {% endif %}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>Товарів немає.</p>
-        {% endif %}
-    </main>
-</body>
-</html>
+                                <a class="btn btn-outline-dark mt-auto" href="{{ url_for('login') }}">Увійти для покупки</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

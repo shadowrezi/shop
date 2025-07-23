@@ -1,9 +1,22 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% block title %}Вхід{% endblock %}
+
 {% block content %}
-<h2>Вхід</h2>
-<form method="POST">
-    <input name="username" placeholder="Логін">
-    <input name="password" type="password" placeholder="Пароль">
-    <button type="submit">Увійти</button>
-</form>
+<div class="centered-form-container">
+  <form method="POST" class="card p-4 shadow" style="width: 100%; max-width: 400px;">
+    <h2 class="mb-4 text-center">Вхід</h2>
+
+    <div class="mb-3">
+      <label for="username" class="form-label">Ім’я користувача</label>
+      <input type="text" class="form-control" id="username" name="username" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label">Пароль</label>
+      <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Увійти</button>
+  </form>
+</div>
 {% endblock %}
