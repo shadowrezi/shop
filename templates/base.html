@@ -15,13 +15,13 @@
 
     <nav class="nav">
       {% if current_user.is_authenticated %}
-        <span class="nav-link disabled">Вітаємо, {{ current_user.username }}!</span>
-        <a href="{{ url_for('profile') }}" class="nav-link">Профіль</a>
-        <a href="{{ url_for('logout') }}" class="nav-link">Вийти</a>
-        <span class="nav-link disabled">Баланс: {{ current_user.balance }} ₴</span>
+        <span class="nav-link disabled">Hi, {{ current_user.username }}!</span>
+        <a href="{{ url_for('profile') }}" class="nav-link">Profile</a>
+        <a href="{{ url_for('logout') }}" class="nav-link">Log out</a>
+        <span class="nav-link disabled">Balance: {{ current_user.balance }} ₴</span>
       {% else %}
-        <a class="btn btn-outline-primary me-2" href="{{ url_for('login') }}">Увійти</a>
-        <a class="btn btn-primary" href="{{ url_for('register') }}">Зареєструватися</a>
+        <a class="btn btn-outline-primary me-2" href="{{ url_for('login') }}">Log in</a>
+        <a class="btn btn-primary" href="{{ url_for('register') }}">Register</a>
       {% endif %}
     </nav>
   </div>
