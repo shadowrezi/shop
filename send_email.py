@@ -1,12 +1,12 @@
 import requests
-# import os
+import os
 
 from dotenv import load_dotenv
 
 load_dotenv('.env')
 
 
-RESEND_API_KEY = 're_2xgeoeaZ_Bhv4s9DQzvEZn52T2oxmDwcu'  # os.environ['RESEND_API_KEY']
+RESEND_API_KEY = os.environ['RESEND_API_KEY']
 FROM_EMAIL = 'onboarding@resend.dev'
 
 
