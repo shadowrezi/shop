@@ -151,7 +151,7 @@ def payment_success(product_id: int):
 @app.route('/gumroad_webhook', methods=['POST'])
 def catch_all():
     data = request.form.to_dict()
-    payment_id = data['payment_id']
+    payment_id = data['permalink']
     email = data['email']
     
     product = Product.query.filter_by(payment_id=payment_id).first()
