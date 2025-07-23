@@ -30,9 +30,13 @@
                         <h2>{{ product.name }}</h2>
                         <br>Ціна: {{ product.price }} ₴<br>
                         {% if current_user.is_authenticated %}
-                            <a href="{{ url_for('buy_product', product_id=product.id) }}" class="buy-button">Купити</a>
+                            {% if current_user.confirmed %}
+                                <a href="{{ url_for('buy_product', product_id=product.id) }}" class="buy-button">Купити</a>
+                            {% else %}
+                                <em>Confirm your account for buy</em>
+                            {% endif %}    
                         {% else %}
-                            <em>Увійдіть, щоб придбати</em>
+                            <em>Log in for buy</em>
                         {% endif %}
                     </li>
                 {% endfor %}

@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Профіль користувача</h2>
+<h2>Profile</h2>
 
-<p><strong>Логін:</strong> {{ user.username }}</p>
-<p><strong>Баланс:</strong> {{ user.balance }} грн</p>
+<p><strong>Login:</strong> {{ user.username }}</p>
+<p><strong>Email:</strong> {{ user.email }}</p>
+<p><strong>Confirmed: </strong> {{ user.confirmed }}</p>
 
-<h3>Куплені товари:</h3>
+<h3>Purchases:</h3>
 {% if user.purchases %}
     <ul>
         {% for purchase in user.purchases %}
@@ -13,10 +14,6 @@
         {% endfor %}
     </ul>
 {% else %}
-    <p>Ви ще нічого не купили.</p>
+    <p>Nothing :)</p>
 {% endif %}
-
-<a href="{{ url_for('index') }}">
-    <button>На головну</button>
-</a>
 {% endblock %}

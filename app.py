@@ -69,6 +69,7 @@ def register():
         confirm_url = url_for('confirm_email', token=token, _external=True)
         html = render_template('email_confirmation.html', confirm_url=confirm_url)
         send_email(user.email, 'Confirm email', html)
+        print(html)
         
         flash('Check your email for confirm account')
         return redirect(url_for('login'))
@@ -146,6 +147,11 @@ def payment_success(product_id: int):
     
     return redirect(url_for('profile'))
 
+
+@app.route('/gumroad_webhook', methods=['POST'])
+def catch_all():
+    print(request.form.to_dict())
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
