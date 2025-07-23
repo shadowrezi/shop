@@ -34,7 +34,7 @@ with app.app_context():
         product = Product(
             name='',
             price=1,
-            payment_url='https://secure.wayforpay.com/button/b92b81655ead9'
+            payment_id='kvmaa'
         )
         db.session.add(product)
         db.session.commit()
@@ -124,7 +124,7 @@ def profile():
 @login_required
 def buy_product(product_id):
     product = Product.query.get_or_404(product_id)
-    return redirect(product.payment_url)
+    return redirect(f'https://urijozimko.gumroad.com/l/{product.payment_id}')
 
 
 @app.route('/payment_success/<int:product_id>', methods=['POST'])
@@ -150,8 +150,22 @@ def payment_success(product_id: int):
 
 @app.route('/gumroad_webhook', methods=['POST'])
 def catch_all():
-    print(request.form.to_dict())
+    data = request.form.to_dict()
+    payment_id = data['payment_id']
+    email = data['email']
     
+    product = Product.query.filter_by(payment_id=payment_id).first()
+    user = User.query.filter_by(email=email).first()
+    
+    purchase = Purchase(user_id=user.id, product_id=product.id)
+
+    db.session.add(purchase)
+    db.session.commit()
+    
+    flash(f'{product.name} purchased!')
+    
+    return redirect(url_for('profile'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
