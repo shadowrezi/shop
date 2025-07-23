@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} — ShadowShop{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-sm">
+        <img src="{{ product.image_url or 'https://dummyimage.com/600x400/dee2e6/6c757d.jpg' }}"
+             class="card-img-top" alt="{{ product.name }}">
+        <div class="card-body">
+          <h3 class="card-title">{{ product.name }}</h3>
+          <p class="card-text">{{ product.description or 'No description provided.' }}</p>
+          <p class="h5">Price: <strong>{{ product.price }} ₴</strong></p>
+
+          {% if current_user.is_authenticated %}
+            <a href="{{ url_for('buy_product', product_id=product.id) }}" class="btn btn-success mt-3">Buy Now</a>
+          {% else %}
+            <p class="text-muted fst-italic mt-3">You must <a href="{{ url_for('login') }}">log in</a> to purchase.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

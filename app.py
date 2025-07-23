@@ -34,9 +34,10 @@ with app.app_context():
     db.create_all()
     if not Product.query.first():
         product = Product(
-            name='',
+            name='dasads ',
             price=1,
-            payment_id='kvmaa'
+            payment_id='kvmaa',
+            description='dasdsa asd a sdas d'
         )
         db.session.add(product)
         db.session.commit()
@@ -133,9 +134,15 @@ def profile():
 
 @app.route('/buy/<int:product_id>')
 @login_required
-def buy_product(product_id):
+def buy_product(product_id: int):
     product = Product.query.get_or_404(product_id)
     return redirect(f'https://urijozimko.gumroad.com/l/{product.payment_id}')
+
+
+@app.route('/product/<int:product_id>')
+def product_card(product_id: int):
+    product = Product.query.get_or_404(product_id)
+    return render_template('product.html', product=product)
 
 
 @app.route('/gumroad_webhook', methods=['POST'])

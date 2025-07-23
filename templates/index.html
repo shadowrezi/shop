@@ -27,7 +27,7 @@
                             <!-- Product name -->
                             <h5 class="fw-bolder">{{ product.name }}</h5>
                             <!-- Product price -->
-                            {{ product.price }} ₴
+                            {{ product.price }} USD
                         </div>
                     </div>
                     
@@ -35,7 +35,7 @@
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                         <div class="text-center">
                             {% if current_user.is_authenticated %}
-                                <a class="btn btn-outline-dark mt-auto" href="{{ url_for('buy_product', product_id=product.id) }}">Buy</a>
+                                <a class="btn btn-outline-dark mt-auto" href="{{ url_for('product_card', product_id=product.id) }}">Buy</a>
                             {% else %}
                                 <a class="btn btn-outline-dark mt-auto" href="{{ url_for('login') }}">Log in for buy</a>
                             {% endif %}
