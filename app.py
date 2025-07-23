@@ -3,13 +3,13 @@ from random import randint
 from flask import Flask, render_template, redirect, url_for, request, flash, session
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer
 
 from send_email import send_email
 from config import Config
 from models import db, User, Product, Purchase
-from forms import RegistrationForm, CodeVerificationForm
+from forms import RegistrationForm, CodeVerificationForm, ChangePasswordForm
 
 
 app = Flask(__name__)
@@ -124,6 +124,21 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+@app.route('/change_password', methods=['GET', 'POST'])
+def change_password():
+    form = ChangePasswordForm()
+    
+    if form.validate_on_submit():
+        if check_password_hash(current_user.password, form.old_password.data):
+            current_user.password = generate_password_hash(form.new_password.data)
+            db.session.commit()
+            flash('Password updated successfully!', 'success')
+            return redirect(url_for('profile'))
+        else:
+            flash('Old password is incorrect!', 'danger')
+    return render_template('change_password.html', form=form)
 
 
 @app.route('/profile')

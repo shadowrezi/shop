@@ -14,8 +14,14 @@
           <p class="h5">Price: <strong>{{ product.price }} ₴</strong></p>
 
           {% if current_user.is_authenticated %}
-            <a href="{{ url_for('buy_product', product_id=product.id) }}" class="btn btn-success mt-3">Buy Now</a>
-          {% else %}
+            {% set purchased_ids = current_user.purchases | map(attribute='product_id') | list %}
+{% set bought = product.id in purchased_ids %}
+            {% if not bought %}
+              <a href="{{ url_for('buy_product', product_id=product.id) }}" class="btn btn-success mt-3">Buy Now</a>
+            {% else %}
+              <span class="btn btn-success mt-auto disabled">Already bought</span>
+            {% endif %}
+            {% else %}
             <p class="text-muted fst-italic mt-3">You must <a href="{{ url_for('login') }}">log in</a> to purchase.</p>
           {% endif %}
         </div>

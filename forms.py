@@ -34,3 +34,28 @@ class CodeVerificationForm(FlaskForm):
         ]
     )
     submit = SubmitField('Verify')
+
+
+class ChangePasswordForm(FlaskForm):
+    old_password = PasswordField(
+        'Old password',
+        validators=[
+            DataRequired(),
+            Length(min=8)     
+        ]
+    )
+    new_password = PasswordField(
+        'New password',
+        validators=[
+            DataRequired(),
+            Length(min=8)     
+        ]
+    )
+    confirm_password = PasswordField(
+        'Confirm password',
+        validators=[
+            DataRequired(),
+            EqualTo('new_password', message='Passwords must match')
+        ]
+    )
+    submit = SubmitField('Change Password')

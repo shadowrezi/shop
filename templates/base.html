@@ -27,16 +27,20 @@
   </div>
 </header>
 
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="px-3" style="padding-left: 36px; padding-right: 36px;">
       {% for message in messages %}
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрити"></button>
+        <div class="d-flex justify-content-center">
+          <div class="alert alert-warning alert-dismissible fade show shadow-sm rounded px-4 py-3 mt-3 w-100" style="max-width: 600px;" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
         </div>
       {% endfor %}
-    {% endif %}
-  {% endwith %}
+    </div>
+  {% endif %}
+{% endwith %}
 
 {% block content %}{% endblock %}
 
