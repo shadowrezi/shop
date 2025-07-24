@@ -5,6 +5,5 @@ werkzeug
 gunicorn
 python-dotenv
 requests
-itsdangerous
 flask-wtf
 email_validator

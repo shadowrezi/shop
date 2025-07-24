@@ -1,8 +1,6 @@
 from flask import Flask
 from flask_login import LoginManager
 
-from itsdangerous import URLSafeTimedSerializer
-
 from common.models import db, User, Product
 
 from routes.main import main
@@ -19,8 +17,6 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 db.init_app(app)
-
-s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 
 @login_manager.user_loader

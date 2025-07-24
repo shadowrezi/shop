@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
-from itsdangerous import URLSafeTimedSerializer
 from random import randint
 import threading
 
@@ -10,7 +9,6 @@ from common.models import db, User
 from common.send_email import send_email
 
 auth = Blueprint('auth', __name__)
-s = URLSafeTimedSerializer('shadow')
 
 
 @auth.route('/register', methods=['GET', 'POST'])
