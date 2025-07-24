@@ -1,4 +1,6 @@
 venv/
 
 instance/
-/__pycache__
+__pycache__/
+
+__pycache__
