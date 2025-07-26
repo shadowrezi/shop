@@ -16,44 +16,40 @@
 
       <a href="{{ url_for('main.index') }}" class="navbar-brand site-title">ShadowShop</a>
 
-      <!-- Кнопка теми для мобілки (до бургеру) -->
       <div class="d-lg-none me-2">
-        <button id="themeToggleMobile" class="btn btn-outline-secondary" type="button" aria-label="Toggle theme">
+        <button id="themeToggleMobile" class="btn btn-outline-secondary border-1" type="button" aria-label="Toggle theme">
           <i class="bi bi-moon-fill"></i>
         </button>
       </div>
 
-      <!-- Бургер -->
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <!-- Меню -->
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav align-items-center">
+        <ul class="navbar-nav align-items-center mt-3">
           {% if current_user.is_authenticated %}
-            <li class="nav-item">
+            <li class="nav-item mb-2">
               <span class="nav-link disabled">Hi, {{ current_user.username }}!</span>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mb-2">
               <span class="nav-link disabled">Balance: {{ current_user.balance }} ₴</span>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mb-2">
               <a href="{{ url_for('main.profile') }}" class="nav-link link">Profile</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mb-2">
               <a href="{{ url_for('auth.logout') }}" class="nav-link link">Log out</a>
             </li>
           {% else %}
-            <li class="nav-item me-2">
-              <a class="btn btn-outline-primary" href="{{ url_for('auth.login') }}">Log in</a>
+            <li class="nav-item mb-2 me-2">
+              <a class="btn btn-outline-primary w-100" href="{{ url_for('auth.login') }}">Log in</a>
             </li>
-            <li class="nav-item">
-              <a class="btn btn-primary" href="{{ url_for('auth.register') }}">Register</a>
+            <li class="nav-item mb-2">
+              <a class="btn btn-primary w-100" href="{{ url_for('auth.register') }}">Register</a>
             </li>
           {% endif %}
-          <!-- Кнопка теми для десктопу (в кінці) -->
           <li class="nav-item ms-3 d-none d-lg-block position-absolute end-0 top-0 mt-2 me-3">
             <button id="themeToggle" class="btn btn-outline-secondary" type="button" aria-label="Toggle theme">
               <i class="bi bi-moon-fill"></i>
@@ -65,9 +61,6 @@
     </div>
   </nav>
 </header>
-
-
-
 
 
 
