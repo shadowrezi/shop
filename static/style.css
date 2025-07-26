@@ -20,9 +20,217 @@
   max-width: 600px;
   margin: 20px auto;
   padding: 15px 20px;
-  background-color: #f8d7da; /* light red (можна змінити) */
+  background-color: #f8d7da;
   color: #721c24;
   border: 1px solid #f5c6cb;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.site-title {
+  color: #212529;
+}
+
+#themeToggle {
+  z-index: 9999;
+}
+
+.nav-link.link {
+  color: #0d6efd;
+}
+
+.nav-link,
+.nav-link.disabled {
+  color: #b0b0b0;
+}
+
+
+body.dark-theme .site-title {
+  color: #e0e0e0;
+}
+
+body.dark-theme {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+body.dark-theme a {
+  color: #90caf9; /* мягкий голубой для ссылок */
+}
+
+body.dark-theme a:hover,
+body.dark-theme a:focus {
+  color: #bb86fc;
+  text-decoration: underline;
+}
+
+body.dark-theme .bg-light {
+  background-color: #1e1e1e !important;
+  color: #e0e0e0;
+}
+
+body.dark-theme .bg-dark {
+  background-color: #121212 !important;
+}
+
+body.dark-theme header,
+body.dark-theme footer {
+  background-color: #1a1a1a !important;
+  color: #e0e0e0;
+}
+
+body.dark-theme .card {
+  background-color: #1f1f1f;
+  color: #e0e0e0;
+  border-color: #333;
+}
+
+body.dark-theme .btn-primary {
+  background-color: #bb86fc;
+  border-color: #bb86fc;
+  color: #121212;
+}
+
+body.dark-theme .btn-primary:hover,
+body.dark-theme .btn-primary:focus {
+  background-color: #9a67ea;
+  border-color: #9a67ea;
+  color: #fff;
+}
+
+body.dark-theme .btn-outline-primary {
+  color: #bb86fc;
+  border-color: #bb86fc;
+}
+
+body.dark-theme .btn-outline-primary:hover,
+body.dark-theme .btn-outline-primary:focus {
+  background-color: #bb86fc;
+  color: #121212;
+}
+
+body.dark-theme .nav-link,
+body.dark-theme .navbar-nav .nav-link.disabled {
+  color: #b0b0b0;
+}
+
+body.dark-theme .nav-link:hover,
+body.dark-theme .navbar-nav .nav-link.disabled:hover {
+  color: #e0e0e0;
+}
+
+body.dark-theme .alert {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border-color: #444;
+}
+
+body.dark-theme input,
+body.dark-theme select,
+body.dark-theme textarea {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border: 1px solid #444;
+}
+
+body.dark-theme input::placeholder,
+body.dark-theme textarea::placeholder {
+  color: #999;
+}
+
+body.dark-theme .form-control:focus {
+  background-color: #3a3a3a;
+  color: #e0e0e0;
+  border-color: #bb86fc;
+  box-shadow: 0 0 0 0.2rem rgba(187, 134, 252, 0.5);
+}
+
+body.dark-theme {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+body.dark-theme .text-muted {
+  color: #adb5bd !important;
+}
+
+body.dark-theme {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+body.dark-theme .text-muted {
+  color: #8a8a8a !important; /* чуть темнее светло-серого */
+}
+
+body.dark-theme footer {
+  background-color: #222222; /* чуть светлее чёрного для футера */
+  color: #999999; /* светло-серый текст футера */
+}
+
+body.dark-theme footer p {
+  color: #999999;
+}
+
+body.dark-theme .nav-link.text-secondary {
+  color: #cccccc !important; /* светло-серый */
+}
+
+body.dark-theme .nav-link.fw-bold.text-light {
+  color: #ffffff !important; /* белый (для баланса) */
+}
+
+body.dark-theme .nav-link.link {
+  color: #bb86fc;
+}
+
+body.dark-theme .pagination {
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0;
+  margin: 1rem 0;
+  box-shadow: none !important;
+}
+
+body.dark-theme .pagination .page-link {
+  color: #bbb;
+  background-color: #2a2a2a;
+  border: 1px solid #444;
+}
+
+body.dark-theme .pagination .page-link:hover {
+  background-color: #3a3a3a;
+  color: #fff;
+  border-color: #666;
+}
+
+body.dark-theme .pagination .page-item.active .page-link {
+  background-color: #bb86fc;
+  border-color: #bb86fc;
+  color: #121212;
+  font-weight: 600;
+}
+
+body.dark-theme .pagination .page-item.disabled .page-link {
+  color: #666;
+  background-color: #2a2a2a;
+  border-color: #444;
+  pointer-events: none;
+}
+
+bod
+
+
+a,
+button,
+.btn,
+.nav-link {
+  text-decoration: none !important;
+}
+
+a:hover,
+button:hover,
+.btn:hover,
+.nav-link:hover {
+  text-decoration: none !important;
 }

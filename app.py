@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_login import LoginManager
 
 from common.models import db, User, Product
@@ -24,11 +24,19 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+
 with app.app_context():
     db.create_all()
+    
+    # from random import randint
+    # for i in range(10):
     if not Product.query.first():
         product = Product(
-            name='dasads ',
+            name='asd s',
             price=1,
             payment_id='kvmaa',
             description='dasdsa asd a sdas d'

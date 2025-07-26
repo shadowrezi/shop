@@ -1,9 +1,28 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash, abort
 from flask_login import login_required
 
 from common.models import Product, Purchase, User, db
 
 shop = Blueprint('shop', __name__)
+
+
+@shop.route('/products/<int:page>')
+def products(page: int):
+    per_page = 20
+    total = Product.query.count()
+    total_pages = (total // per_page) + 1
+
+    if page < 1 or page > total_pages:
+        abort(404)
+
+    products = Product.query.offset((page - 1) * per_page).limit(per_page).all()
+
+    return render_template('products.html', products=products, page=page, total_pages=total_pages)
+
+
+@shop.route('/products')
+def products_redirect():
+    return redirect(url_for('shop.products', page=1))
 
 
 @shop.route('/product/<int:product_id>')
