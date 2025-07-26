@@ -227,6 +227,10 @@ body.dark-theme .navbar-toggler {
   background-color: #1f1f1f;
 }
 
+body.dark-theme a.btn-buy {
+  color: #fff;
+}
+
 
 a,
 button,
