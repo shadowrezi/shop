@@ -27,8 +27,8 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav align-items-center mt-3">
+      <div class="collapse navbar-collapse mt-2 justify-content-end" id="navbarNav">
+        <ul class="navbar-nav align-items-center">
           {% if current_user.is_authenticated %}
             <li class="nav-item mb-2">
               <span class="nav-link disabled">Hi, {{ current_user.username }}!</span>
