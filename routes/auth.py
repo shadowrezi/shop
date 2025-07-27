@@ -1,8 +1,10 @@
+import re
+from random import randint
+import threading
+
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
-from random import randint
-import threading
 
 from common.forms import RegistrationForm, CodeVerificationForm, LogInForm, ChangePasswordForm
 from common.models import db, User
@@ -11,19 +13,46 @@ from common.send_email import send_email
 auth = Blueprint('auth', __name__)
 
 
+def validate_password(password: str) -> list[str]:
+    errors = []
+    if not re.search(r"[A-Z]", password):
+        errors.append('The password must contain at least one capital letter.')
+
+    if not re.search(r"\d", password):
+        errors.append('The password must contain at least one number.')
+    return errors
+
+
+def print_errors(errors: list[str] | list[list[str]]) -> None:
+    for error in errors:
+        if isinstance(error, str):
+            flash(error)
+        else:
+            flash(*error)
+
+
 @auth.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
+
     if form.validate_on_submit():
         username = form.username.data.strip()
         email = form.email.data.strip()
         password = form.password.data.strip()
 
+        errors = []
+        
         if User.query.filter_by(username=username).first():
-            flash('Account with this username has been already registered!')
-            return render_template('register.html', form=form)
+            errors.append('Account with this username has been already registered! ')
         if User.query.filter_by(email=email).first():
-            flash('Account with this email has been already registered!')
+            errors.append('Account with this email has been already registered!')
+        
+        errors.extend(
+            validate_password(password)
+        )
+
+        if errors:
+            print_errors(errors)
             return render_template('register.html', form=form)
 
         code = str(randint(1000, 9999))
@@ -47,7 +76,7 @@ def verify():
     register_data = session.get('registration')
 
     if not register_data:
-        flash('Session is deprecated! Try again')
+        flash('Session is deprecated! Try again', 'warning')
         return redirect(url_for('auth.register'))
 
     if form.validate_on_submit():
@@ -61,7 +90,7 @@ def verify():
             db.session.commit()
 
             session.pop('registration')
-            flash('Registration is successful!')
+            flash('Registration is successful!', 'success')
             return redirect(url_for('auth.login'))
         else:
             flash("Invalid code!")
@@ -85,8 +114,7 @@ def login():
         if check_password_hash(user.password, password):
             login_user(user)
             return redirect(url_for('main.index'))
-        else:
-            flash("Password is incorrect")
+        flash("Password is incorrect", 'danger')
     return render_template('login.html', form=form)
 
 
@@ -102,8 +130,17 @@ def logout():
 def change_password():
     form = ChangePasswordForm()
     if form.validate_on_submit():
-        if check_password_hash(current_user.password, form.old_password.data):
-            current_user.password = generate_password_hash(form.new_password.data)
+        old_password = form.old_password.data
+        new_password = form.new_password.data
+        
+        errors = validate_password(new_password)
+        
+        if errors:
+            print_errors(errors)
+            return render_template('change_password.html', form=form)
+
+        if check_password_hash(current_user.password, old_password):
+            current_user.password = generate_password_hash(new_password)
             db.session.commit()
             flash('Password updated successfully!', 'success')
             return redirect(url_for('main.profile'))

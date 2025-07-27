@@ -239,6 +239,45 @@ body.dark-theme a.btn-buy {
   color: #fff;
 }
 
+body.dark-theme .link {
+  color: #bb86fc;
+}
+
+body.dark-theme .btn-close {
+  filter: invert(1);
+}
+
+body.dark-theme .flash-message .alert {
+  background-color: #222;  /* темний фон */
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+/* Кольори для типів */
+body.dark-theme .alert-success {
+  background-color: #2e7d32 !important;  /* темно-зелений */
+  color: white !important;
+}
+
+body.dark-theme .alert-danger {
+  background-color: #713A2E !important;
+  color: #fff !important;
+}
+
+body.dark-theme .alert-warning {
+  background-color: #f9a825 !important;  /* гірчичний */
+  color: black !important;
+}
+
+body.dark-theme .alert-info {
+  background-color: #1565c0 !important;  /* темно-синій */
+  color: #fff !important;
+}
+
+body.dark-theme .btn-close {
+  filter: invert(1);
+}
 
 a,
 button,

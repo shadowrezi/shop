@@ -1,8 +1,6 @@
-import re
-
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, EmailField
-from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Email, Length, EqualTo
 
 
 class RegistrationForm(FlaskForm):
@@ -17,12 +15,6 @@ class RegistrationForm(FlaskForm):
         EqualTo('password', message="Passwords don't match")
     ])
     submit = SubmitField('Register')
-    
-    def validate_password(self, field):
-        if not re.search(r"[A-Z]", field.data):
-            raise ValidationError('The password must contain at least one capital letter.')
-        if not re.search(r"\d", field.data):
-            raise ValidationError('The password must contain at least one number.')
 
 
 class LogInForm(FlaskForm):
