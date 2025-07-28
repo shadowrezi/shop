@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+  <h2>Запит на вивід коштів</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+      {{ form.amount.label(class="form-label") }}
+      {{ form.amount(class="form-control") }}
+      {% for error in form.amount.errors %}
+        <div class="text-danger">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="mb-3">
+      {{ form.details.label(class="form-label") }}
+      {{ form.details(class="form-control") }}
+      {% for error in form.details.errors %}
+        <div class="text-danger">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    {{ form.submit(class="btn btn-primary") }}
+  </form>
+</div>
+{% endblock %}

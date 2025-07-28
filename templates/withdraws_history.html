@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Історія виводів</h2>
+  {% if withdrawals %}
+    <table class="table table-dark table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Сума</th>
+          <th>Реквізити</th>
+          <th>Статус</th>
+          <th>Час</th>
+          <th>Причина</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for w in withdrawals %}
+          <tr>
+            <td>{{ w.amount }} грн</td>
+            <td>{{ w.details }}</td>
+            <td>{{ w.status }}</td>
+            <td>{{ w.timestamp.strftime("%Y-%m-%d %H:%M") }}</td>
+            <td>{{ w.reason or "-" }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>Ви ще не створювали запитів.</p>
+  {% endif %}
+{% endblock %}
