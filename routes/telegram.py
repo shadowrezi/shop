@@ -40,7 +40,7 @@ def connect():
     if not token or token not in active_tokens:
         return jsonify({'status': 'error', 'message': 'Invalid token'}), 400
     
-    user_id = active_tokens['token']
+    user_id = active_tokens[token]
     user = User.query.get(user_id)
     if not user:
         return jsonify({'status': 'error', 'message': 'User not found'}), 400
