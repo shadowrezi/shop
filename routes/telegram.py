@@ -23,8 +23,9 @@ def generate_token():
 @login_required
 def get_token():
     token_time = session.get('telegram_token_time')
-    if not token_time or (datetime.utcnow() - datetime.fromisoformat(token_time)) > timedelta(minutes=10):
+    if not token_time or (datetime.utcnow() - datetime.fromisoformat(token_time)) > timedelta(minutes=1):
         session['telegram_token'] = generate_token()
+        print(active_tokens)
         session['telegram_token_time'] = datetime.utcnow().isoformat()
         active_tokens[session['telegram_token']] = current_user.id
     return render_template('connect_telegram.html', token=session['telegram_token'])
