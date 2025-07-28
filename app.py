@@ -6,6 +6,7 @@ from common.models import db, User, Product
 from routes.main import main
 from routes.auth import auth
 from routes.shop import shop
+from routes.telegram import telegram
 
 
 app = Flask(__name__)
@@ -48,6 +49,7 @@ with app.app_context():
 app.register_blueprint(main)
 app.register_blueprint(auth)
 app.register_blueprint(shop)
-    
+app.register_blueprint(telegram)
+
 if __name__ == '__main__':
     app.run(debug=True)
