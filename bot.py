@@ -38,6 +38,7 @@ async def handle_token(message: Message):
         except Exception as ex:
             await message.answer('Error on server, 400')
             print(ex)
+            return
     if data.get('status') == 'ok':
         await message.answer('Account is successfully connected!')
     else:
