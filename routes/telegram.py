@@ -2,8 +2,8 @@ import random
 import string
 from datetime import timedelta, datetime
 
-from flask import Blueprint, render_template, session, current_user, jsonify
-from flask_login import login_required
+from flask import Blueprint, render_template, session, jsonify
+from flask_login import login_required, current_user
 
 from common.models import db, User
 
