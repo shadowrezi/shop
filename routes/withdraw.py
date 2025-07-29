@@ -48,8 +48,8 @@ def send_withdraw_telegram():
             'parse_mode': 'Markdown',
             'reply_markup': {
                 'inline_keyboard': [[
-                    {'text': '✅ Approve', 'callback_data': f'approve:{withdraw.id}:{amount}:{current_user.email}'},
-                    {'text': '❌ Decline', 'callback_data': f'decline:{withdraw.id}:{amount}:{current_user.email}'}
+                    {'text': '✅ Approve', 'callback_data': f'approve:{withdraw.id}'},
+                    {'text': '❌ Decline', 'callback_data': f'decline:{withdraw.id}'}
                 ]]
             }
         }
@@ -79,11 +79,11 @@ def update_withdraw(action: str):
     
     if action not in ('approve', 'decline'):
         return jsonify({'error': 'Invalid action'}), 400
-    
+
     withdraw_request = db.session.get(WithdrawRequest, withdraw_id)
     if not withdraw_request:
         return jsonify({'error': 'Withdrawal request not found'}), 404
-    
+
     if withdraw_request.status != 'pending':
         return jsonify({'error': 'Request already processed'}), 400
     
@@ -91,5 +91,5 @@ def update_withdraw(action: str):
     withdraw_request.reason = reason if reason else None
 
     db.session.commit()
-    
+
     return '', 204
