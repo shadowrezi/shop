@@ -18,7 +18,7 @@
             <td>{{ w.amount }} грн</td>
             <td>{{ w.details }}</td>
             <td>{{ w.status }}</td>
-            <td>{{ w.timestamp.strftime("%Y-%m-%d %H:%M") }}</td>
+            <td>{{ w.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
             <td>{{ w.reason or "-" }}</td>
           </tr>
         {% endfor %}
