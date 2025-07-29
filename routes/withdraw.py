@@ -26,6 +26,12 @@ def send_withdraw_telegram():
         amount = float(request.form.get('amount'))
         details = request.form.get('details')
 
+        if amount > current_user.balance:
+            flash('Insufficient funds for withdraw', 'warning')
+            return render_template('withdraw.html', form=form)
+
+        current_user.balance -= amount
+
         withdraw = WithdrawRequest(
             user_id=current_user.id,
             amount=amount,
@@ -40,7 +46,7 @@ def send_withdraw_telegram():
 💳 Datails: {details}
 💰 Sum: {amount:.2f} UAH
         '''.strip()
-        
+
         url = f'https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage'
         data = {
             'chat_id': ADMIN_CHAT_ID,
@@ -86,10 +92,13 @@ def update_withdraw(action: str):
 
     if withdraw_request.status != 'pending':
         return jsonify({'error': 'Request already processed'}), 400
-    
+
+    if action == 'decline':
+        current_user.balance += withdraw_request.amount
+
     withdraw_request.status = action
     withdraw_request.reason = reason if reason else None
 
     db.session.commit()
 
-    return '', 204
+    return jsonify({'status': 200})
