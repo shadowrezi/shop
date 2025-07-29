@@ -32,11 +32,12 @@ pending_declines = {}
 async def approve_handler(callback: CallbackQuery):
     withdraw_id = callback.data.split(":")[1]
     async with aiohttp.ClientSession() as session:
-        async with session.post(API_URL_APPROVE, json={"withdraw_id": withdraw_id}) as resp:
+        async with session.post(API_URL_APPROVE, json={"withdraw_id": withdraw_id, 'reason': None}) as resp:
             if resp.status == 200:
                 await callback.answer("✅ Запит підтверджено")
                 await callback.message.edit_reply_markup()
             else:
+                print(await resp.text())
                 await callback.answer("❌ Помилка при підтвердженні", show_alert=True)
 
 
@@ -64,6 +65,7 @@ async def decline_reason_handler(message: Message, state: FSMContext):
             if resp.status == 200:
                 await message.answer("Причина відхилення надіслана")
             else:
+                print(await resp.text())
                 await message.answer("❌ Помилка при відхиленні")
 
     await state.clear()
