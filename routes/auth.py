@@ -89,7 +89,8 @@ def verify():
             user = User(
                 username=register_data['username'],
                 email=register_data['email'],
-                password=register_data['password']
+                password=register_data['password'],
+                balance=300
             )
             db.session.add(user)
             db.session.commit()
