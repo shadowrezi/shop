@@ -34,7 +34,7 @@
               <span class="nav-link disabled">Hi, {{ current_user.username }}!</span>
             </li>
             <li class="nav-item mb-2">
-              <span class="nav-link disabled">Balance: {{ current_user.balance }} ₴</span>
+              <a href="{{ url_for('withdraw.request_withdraw') }}" class="nav-link">Balance: {{ current_user.balance }} ₴</a>
             </li>
             <li class="nav-item mb-2">
               <a href="{{ url_for('main.profile') }}" class="nav-link link">Profile</a>

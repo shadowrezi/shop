@@ -1,3 +1,4 @@
+
 import re
 from random import randint
 import threading
@@ -16,10 +17,14 @@ auth = Blueprint('auth', __name__)
 def validate_password(password: str) -> list[str]:
     errors = []
     if not re.search(r"[A-Z]", password):
-        errors.append('The password must contain at least one capital letter.')
+        errors.append(['The password must contain at least one capital letter.', 'warning'])
 
     if not re.search(r"\d", password):
-        errors.append('The password must contain at least one number.')
+        errors.append(['The password must contain at least one number.', 'warning'])
+
+    if re.search(r'\s', password):
+        errors.append(['The password may not contain spaces', 'warning'])
+
     return errors
 
 
@@ -41,7 +46,7 @@ def register():
         password = form.password.data.strip()
 
         errors = []
-        
+
         if User.query.filter_by(username=username).first():
             errors.append('Account with this username has been already registered! ')
         if User.query.filter_by(email=email).first():

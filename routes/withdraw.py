@@ -20,7 +20,7 @@ withdraw = Blueprint('withdraw', __name__)
 
 @withdraw.route('/withdraw', methods=['GET', 'POST'])
 @login_required
-def send_withdraw_telegram():
+def request_withdraw():
     form = WithdrawForm()
     if form.validate_on_submit():
         amount = float(request.form.get('amount'))
