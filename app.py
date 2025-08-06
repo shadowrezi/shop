@@ -6,7 +6,7 @@ from common.models import db, User, Product
 from routes.main import main
 from routes.auth import auth
 from routes.shop import shop
-from routes.withdraw import withdraw
+from routes.wallet import wallet
 
 
 app = Flask(__name__)
@@ -39,7 +39,6 @@ with app.app_context():
         product = Product(
             name='asd s',
             price=1,
-            payment_id='kvmaa',
             description='dasdsa asd a sdas d'
         )
         db.session.add(product)
@@ -49,7 +48,7 @@ with app.app_context():
 app.register_blueprint(main)
 app.register_blueprint(auth)
 app.register_blueprint(shop)
-app.register_blueprint(withdraw)
+app.register_blueprint(wallet)
 
 if __name__ == '__main__':
     app.run(debug=True)

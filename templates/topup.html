@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
+{% block title %}Top Up Balance{% endblock %}
+
 {% block content %}
+
 <div class="container mt-5">
-  <h2>Request withdraw</h2>
+  <h2>Top Up Balance</h2>
   <form method="POST">
     {{ form.hidden_tag() }}
 
@@ -22,6 +25,7 @@
     </div>
 
     {{ form.submit(class="btn btn-primary") }}
+
   </form>
 </div>
 {% endblock %}

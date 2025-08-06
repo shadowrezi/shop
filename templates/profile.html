@@ -24,7 +24,7 @@
         <ul class="list-group">
           {% for purchase in user.purchases %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
-              <a class="nav-link" href="{{ url_for('product_card', product_id=purchase.product.id) }}">{{ purchase.product.name }}</a>
+              <a class="nav-link" href="{{ url_for('shop.product_card', product_id=purchase.product.id) }}">{{ purchase.product.name }}</a>
               <span class="badge bg-primary rounded-pill">{{ purchase.product.price }} ₴</span>
             </li>
           {% endfor %}

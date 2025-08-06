@@ -76,3 +76,21 @@ class WithdrawForm(FlaskForm):
         ]
     )
     submit = SubmitField('Withdraw')
+
+
+class TopupForm(FlaskForm):
+    amount = DecimalField(
+        'Sum (UAH)',
+        validators=[
+            DataRequired(),
+            NumberRange(min=100, message='Minimal sum must be at least 100 UAH')
+        ]
+    )
+    details = StringField(
+        'Details (e.g. payment method)',
+        validators=[
+            DataRequired(),
+            Length(min=16, max=128)
+        ]
+    )
+    submit = SubmitField('Top Up')

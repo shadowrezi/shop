@@ -1,4 +1,3 @@
-
 import re
 from random import randint
 import threading
@@ -32,8 +31,10 @@ def print_errors(errors: list[str] | list[list[str]]) -> None:
     for error in errors:
         if isinstance(error, str):
             flash(error)
-        else:
+        elif isinstance(error, list) and len(error) == 2:
             flash(*error)
+        else:
+            flash('An unknown error occurred', 'danger')
 
 
 @auth.route('/register', methods=['GET', 'POST'])
@@ -97,7 +98,8 @@ def verify():
 
             session.pop('registration')
             flash('Registration is successful!', 'success')
-            return redirect(url_for('auth.login'))
+            login_user(user)
+            return redirect(url_for('main.index'))
         else:
             flash("Invalid code!")
     return render_template('verify.html', form=form)
