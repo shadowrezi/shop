@@ -38,7 +38,7 @@ with app.app_context():
 
     if not db.session.query(Product).first():
         product = Product(
-            name='asd s',
+            name='asd s ',
             price=1,
             description='dasdsa asd a sdas d'
         )
