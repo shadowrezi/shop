@@ -6,7 +6,7 @@ from flask_login import login_required, current_user
 
 from dotenv import load_dotenv
 
-from common.models import db, WalletRequest
+from common.models import User, db, WalletRequest
 from common.forms import WithdrawForm, TopupForm
 
 
@@ -85,12 +85,8 @@ def request_wallet():
 @wallet.route('/wallet/request/<action>', methods=['POST'])
 def update_request(action: str):
     data = request.get_json()
-    type = data.get('type')
     request_id = data.get('request_id')
     reason = data.get('reason')
-
-    if action not in ('approve', 'decline'):
-        return jsonify({'error': 'Invalid action'}), 400
 
     wallet_request = db.session.get(WalletRequest, request_id)
     if not wallet_request:
@@ -99,8 +95,14 @@ def update_request(action: str):
     if wallet_request.status != 'pending':
         return jsonify({'error': 'Request already processed'}), 400
 
-    if type == 'withdraw' and action == 'approve':
-        current_user.balance -= wallet_request.amount
+    type = wallet_request.type
+    if type not in ('withdraw', 'topup'):
+        return jsonify({'error': 'Invalid request type'}), 400
+    
+    current_user = db.session.get(User, wallet_request.user_id)
+
+    if type == 'withdraw' and action == 'decline':
+        current_user.balance += wallet_request.amount
     elif type == 'topup' and action == 'approve':
         current_user.balance += wallet_request.amount
     wallet_request.status = action

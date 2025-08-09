@@ -36,6 +36,11 @@
             <li class="nav-item mb-2">
               <a href="{{ url_for('wallet.request_wallet') }}" class="nav-link">Balance: {{ current_user.balance }} ₴</a>
             </li>
+            {% if current_user.is_admin %}
+              <li class="nav-item mb-2">
+                <a href="{{ url_for('admin.index') }}" class="nav-link link">Admin Dashboard</a>
+              </li>
+            {% endif %}
             <li class="nav-item mb-2">
               <a href="{{ url_for('main.profile') }}" class="nav-link link">Profile</a>
             </li>

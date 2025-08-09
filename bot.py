@@ -13,8 +13,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BOT_TOKEN = os.environ['TELEGRAM_TOKEN']
-API_URL_APPROVE = "https://shop-auf1.onrender.com/wallet/request/approve"
-API_URL_DECLINE = "https://shop-auf1.onrender.com/wallet/request/decline"
+DOMEN = 'http://127.0.0.1:5000'  # 'https://shop-auf1.onrender.com'
+API_URL_APPROVE = f"{DOMEN}/wallet/request/approve"
+API_URL_DECLINE = f"{DOMEN}/wallet/request/decline"
 
 bot = Bot(BOT_TOKEN)
 dp = Dispatcher()

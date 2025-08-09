@@ -94,3 +94,10 @@ class TopupForm(FlaskForm):
         ]
     )
     submit = SubmitField('Top Up')
+
+
+class AddProductForm(FlaskForm):
+    name = StringField('Product Name', validators=[DataRequired(), Length(min=1, max=100)])
+    price = DecimalField('Price (UAH)', validators=[DataRequired(), NumberRange(min=1)])
+    description = StringField('Description', validators=[DataRequired(), Length(max=500)])
+    submit = SubmitField('Add Product')

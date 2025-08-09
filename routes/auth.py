@@ -120,6 +120,8 @@ def login():
             return render_template('login.html', form=form)
 
         if check_password_hash(user.password, password):
+            # user.balance += 300
+            db.session.commit()
             login_user(user)
             return redirect(url_for('main.index'))
         flash("Password is incorrect", 'danger')
