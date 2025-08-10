@@ -30,7 +30,7 @@ def load_user(user_id):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('404.html'), 404
+    return render_template('errors/404.html'), 404
 
 
 with app.app_context():
@@ -38,7 +38,7 @@ with app.app_context():
 
     if not db.session.query(Product).first():
         product = Product(
-            name='asd s',
+            name='asd s ',
             price=1,
             description='dasdsa asd a sdas d'
         )

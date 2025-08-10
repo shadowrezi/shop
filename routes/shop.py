@@ -17,7 +17,7 @@ def products(page: int):
 
     products = Product.query.offset((page - 1) * per_page).limit(per_page).all()
 
-    return render_template('products.html', products=products, page=page, total_pages=total_pages)
+    return render_template('shop/products.html', products=products, page=page, total_pages=total_pages)
 
 
 @shop.route('/products')
@@ -28,7 +28,7 @@ def products_redirect():
 @shop.route('/product/<int:product_id>')
 def product_card(product_id: int):
     product = Product.query.get_or_404(product_id)
-    return render_template('product.html', product=product)
+    return render_template('shop/product.html', product=product)
 
 
 @shop.route('/buy/<int:product_id>')
