@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8000
 
 # Start both app.py and bot.py using a process manager
-CMD ["sh", "-c", "gunicorn app:app --bind 0.0.0.0:8000 & python bot.py && wait"]
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:8000"]
