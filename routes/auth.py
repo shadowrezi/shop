@@ -59,7 +59,7 @@ def register():
 
         if errors:
             print_errors(errors)
-            return render_template('register.html', form=form)
+            return render_template('auth/register.html', form=form)
 
         code = str(randint(1000, 9999))
         session['registration'] = {
@@ -73,7 +73,7 @@ def register():
         threading.Thread(target=send_email, args=(email, 'Verification code', html)).start()
         flash('We sent verification code on your email.')
         return redirect(url_for('auth.verify'))
-    return render_template('register.html', form=form)
+    return render_template('auth/register.html', form=form)
 
 
 @auth.route('/verify', methods=['GET', 'POST'])
@@ -102,7 +102,7 @@ def verify():
             return redirect(url_for('main.index'))
         else:
             flash("Invalid code!")
-    return render_template('verify.html', form=form)
+    return render_template('auth/verify.html', form=form)
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -117,7 +117,7 @@ def login():
 
         if not user:
             flash("User not found")
-            return render_template('login.html', form=form)
+            return render_template('auth/login.html', form=form)
 
         if check_password_hash(user.password, password):
             # user.balance += 300
@@ -125,7 +125,7 @@ def login():
             login_user(user)
             return redirect(url_for('main.index'))
         flash("Password is incorrect", 'danger')
-    return render_template('login.html', form=form)
+    return render_template('auth/login.html', form=form)
 
 
 @auth.route('/logout')
@@ -147,7 +147,7 @@ def change_password():
         
         if errors:
             print_errors(errors)
-            return render_template('change_password.html', form=form)
+            return render_template('auth/change_password.html', form=form)
 
         if check_password_hash(current_user.password, old_password):
             current_user.password = generate_password_hash(new_password)
@@ -156,4 +156,4 @@ def change_password():
             return redirect(url_for('main.profile'))
         else:
             flash('Old password is incorrect!', 'danger')
-    return render_template('change_password.html', form=form)
+    return render_template('auth/change_password.html', form=form)

@@ -1,27 +1,26 @@
-{% extends 'base.html' %}
-
-{% block title %}Admin Dashboard{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% block title %}Admin Dashboard{% endblock %} {%
+block content %}
 <div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>📊 Admin Dashboard</h1>
-        <a href="{{ url_for('admin.products') }}" class="btn btn-primary">
-            Manage Products
-        </a>
-    </div>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>📊 Admin Dashboard</h1>
+    <a href="{{ url_for('admin.products') }}" class="btn btn-primary">
+      Manage Products
+    </a>
+  </div>
 
-    <div class="row">
-        {% for key, value in stats.items() %}
-            <div class="col-md-3">
-                <div class="card text-white bg-primary mb-3">
-                    <div class="card-header text-capitalize">{{ key.replace('_', ' ') }}</div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ value }}</h5>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
+  <div class="row">
+    {% for key, value in stats.items() %}
+    <div class="col-md-3">
+      <div class="card text-white bg-primary mb-3">
+        <div class="card-header text-capitalize">
+          {{ key.replace('_', ' ') }}
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">{{ value }}</h5>
+        </div>
+      </div>
     </div>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}

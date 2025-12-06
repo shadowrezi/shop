@@ -38,7 +38,7 @@ def request_wallet():
         if action == 'withdraw':
             if amount > current_user.balance:
                 flash('Insufficient funds for withdraw', 'warning')
-                return render_template('withdraw.html', form=form)
+                return render_template('wallet/withdraw.html', form=form)
 
             current_user.balance -= amount
         elif action == 'topup':
@@ -79,7 +79,7 @@ def request_wallet():
             flash('Error, try again! ', 'warning')
             print(ex)
         return redirect(url_for('wallet.history'))
-    return render_template(f'{action}.html', form=form)
+    return render_template(f'wallet/{action}.html', form=form)
 
 
 @wallet.route('/wallet/request/<action>', methods=['POST'])
@@ -116,4 +116,4 @@ def update_request(action: str):
 @login_required
 def history():
     requests = WalletRequest.query.filter_by(user_id=current_user.id).order_by(WalletRequest.created_at.desc()).all()
-    return render_template('history.html', requests=requests)
+    return render_template('user/history.html', requests=requests)
