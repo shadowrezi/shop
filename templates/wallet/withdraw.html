@@ -1,5 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
+
+<div class="switch-nav">
+  <button id="btnTopup" data-url="/wallet/topup">Topup</button>
+  <button id="btnWithdraw" data-url="/wallet/withdraw">Withdraw</button>
+</div>
+
+<script>
+  (function() {
+    const btnTop = document.getElementById("btnTopup");
+    const btnWith = document.getElementById("btnWithdraw");
+  
+    // навигация
+    btnTop.onclick = () => location.href = "/wallet/topup";
+    btnWith.onclick = () => location.href = "/wallet/withdraw";
+  
+    // выделяем текущую страницу
+    const path = location.pathname.replace(/\/+$/, "");
+    if (path === "/wallet/withdraw") {
+      btnWith.classList.add("active");
+    } else {
+      btnTop.classList.add("active");
+    }
+  })();
+  </script>
+
 <div class="container mt-5">
   <h2>Request withdraw</h2>
   <form method="POST">
